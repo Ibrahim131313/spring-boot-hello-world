@@ -3,25 +3,20 @@ pipeline {
 
     environment { 
         IMAGE_NAME = "ebrahimmohammed/jenkins-theme"
-        MAVEN_IMAGE = "maven:3.9.0-eclipse-temurin-11"
     } 
 
     stages { 
         stage('Checkout') { 
             steps { 
                 checkout scm 
-                // عرض محتويات المشروع للتأكد من وجود pom.xml
-                sh "ls -l \$WORKSPACE"
+                sh "ls -l \$WORKSPACE"  // التأكد من وجود pom.xml
             } 
         } 
 
         stage('Build with Maven') { 
             steps { 
-                // تشغيل Maven داخل container مع تحديد pom.xml
-                sh """
-                    docker run --rm -v \$WORKSPACE:/workspace -w /workspace ${MAVEN_IMAGE} \
-                    mvn -B -f pom.xml clean package
-                """
+                // تشغيل Maven مباشرة على Jenkins agent
+                sh "mvn -B clean package"
             } 
         } 
 
